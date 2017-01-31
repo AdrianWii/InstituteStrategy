@@ -12,11 +12,12 @@ import java.util.Random;
  * @author mlyczkowska2
  */
 public class instituteStrategy {
-
+    private static final int RANDOM_RANGE = 99;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
         /**
          * n - długosc wektora, rozmiar macierzy
          */
@@ -39,6 +40,7 @@ public class instituteStrategy {
          * y - wektor o rozmiarze n, składa się z jednej "1", pozostałe "0"
          */
         double[] y = new double[n];
+        double finalResult = 0.;
 
         Random generator = new Random();
 
@@ -61,10 +63,19 @@ public class instituteStrategy {
          */
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                C[i][j] = generator.nextInt(99);
+                C[i][j] = generator.nextInt(RANDOM_RANGE);
             }
         }
 
+        /**
+         * inicjalizacja danych macierzy R
+         */
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                R[i][j] = generator.nextInt(RANDOM_RANGE);
+            }
+        }
+        
         System.out.println("\nMACIERZ C");
         displayMatrix(C, n, "C");
 
@@ -128,6 +139,7 @@ public class instituteStrategy {
                  */
                 
                 //TODO
+                finalResult += R[i][j]*suma[i];
             }
         }
 
