@@ -14,16 +14,16 @@ import java.util.Random;
 public class instituteStrategy {
 
     private static final int RANDOM_RANGE = 99;
+    /**
+     * n - długosc wektora, rozmiar macierzy
+     */
+    private static final int n = 10;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
 
-        /**
-         * n - długosc wektora, rozmiar macierzy
-         */
-        int n = 10;
         /**
          * C - tablica wypłat dla wektora y, macierz NxN, wypełniona losowymi
          * liczbami naturalnymi
@@ -61,7 +61,7 @@ public class instituteStrategy {
         }
         System.out.println("\nWEKTOR x");
         displayVector(x, "x");
-        
+
         /**
          * inicjalizacja danych macierzy C
          */
@@ -142,7 +142,7 @@ public class instituteStrategy {
                 /**
                  * szukamy nowe wartości wektora x, tak, aby wielomian miał jak
                  * największą wartość. Trzeba pamiętać, że elementy wektora x
-                 * muszą sumować się do 1. http://simplex.republika.pl/
+                 * muszą sumować się do 1.
                  */
 
                 coefficients[i][j] = R[i][j] * suma[i];
@@ -165,21 +165,37 @@ public class instituteStrategy {
 
         System.out.println("\nWSPÓŁCZYNNIKI UKŁADU LINIOWEGO");
         displayVector(linearCoefficients, "q");
-        
+
         /**
-         * musimy teraz wyznaczyć to równanie tak, aby wielomian
-         * uzyskał maksimum,
-         * mamy:
+         * musimy teraz wyznaczyć to równanie tak, aby wielomian uzyskał
+         * maksimum, mamy:
          * x[1]*linearCoefficients[1]+...+x[n]*linearCoefficients[n]
-         * 
+         *
          * dodatkowo musi być spełnione: x[1]+...x[n]=1;
          */
-        
-        
         //TODO - rozwiązać układ
         //max of x[1]*linearCoefficients[1]+...+x[n]*linearCoefficients[n]
         //x[1]+...x[n]=1;
+        //utwórzmy nowy wektor x, ktorego suma elemento = 1
+        if (haveCorrectSum == false) {
+            System.out.println(
+                    "Vector x has not been properly initialized.\n"
+                    + "The sum of the elements are different from one");
+            x = initializeVector(n);
+        }
+        System.out.println("\nNOWY WEKTOR x");
+        displayVector(x, "x");
+
+        //teraz przypiszmy jego wartośći odpowiednio do najwyższym 
+        //współczynnika najwiekszy x z utworzonego wczesniej wektora
+        x = sort(x);
+        System.out.println("\nPOSORTOWANY WEKTOR x");
+        displayVector(x, "x");
         
+        //x = assignMax(x, linearCoefficients);
+        
+        //policzyc sume i wynik bedzie maksymalna wartoscia.
+
     }
 
     public static double[] initializeVector(int n) {
@@ -230,9 +246,7 @@ public class instituteStrategy {
     public static void displayMatrix(int[][] matrix, int n, String name) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                int ii = i + 1;
-                int jj = j + 1;
-                System.out.print(name + "[" + ii + "][" + jj + "]=" + matrix[i][j] + "     ");
+                System.out.print(name + "[" + (i + 1) + "][" + (j + 1) + "]=" + matrix[i][j] + "     ");
             }
             System.out.println("");
         }
@@ -244,10 +258,46 @@ public class instituteStrategy {
             for (int j = 0; j < n; j++) {
                 int ii = i + 1;
                 int jj = j + 1;
-                System.out.print(name + "[" + ii + "][" + jj + "]=" + matrix[i][j] + "     ");
+                System.out.print(name + "[" + (i + 1) + "][" + (j + 1) + "]=" + matrix[i][j] + "     ");
             }
             System.out.println("");
         }
-
     }
+
+    public static double[] sort(double x[]) {
+        double temp;
+
+        for (int i = 0; i < x.length - 1; i++) {
+            for (int j = i + 1; j < x.length; j++) {
+                if (x[j] < x[i]) {
+                    temp = x[j];
+                    x[j] = x[i];
+                    x[i] = temp;
+                }
+            }
+        }
+        return x;
+    }
+
+//   public static double[] assignMax(double x[], double coefficients[]) {
+//
+//        double[] tempCoefficients = coefficients;
+//        double[] temp2Coefficients = coefficients;
+//        
+//        double[] tempX = new double[n];
+//        tempCoefficients = sort(coefficients);
+//
+//        for (int i = 0; i < n; i++) {
+//            for (int j = 0; j < n; j++) {
+//                if (tempCoefficients[i] == temp2Coefficients[j]) {
+//                    tempX[j] = x[i];
+//                }
+//            }
+//        }
+//
+//       return tempX;
+//    }
+    
+    
+
 }
