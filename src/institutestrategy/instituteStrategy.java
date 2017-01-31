@@ -50,10 +50,11 @@ public class instituteStrategy {
 
         if (haveCorrectSum == false) {
             System.out.println(
-                    "Vector x vector has not been properly initialized.\n "
+                    "Vector x has not been properly initialized.\n"
                     + "The sum of the elements are different from one");
             x = initializeVector(n);
         }
+        System.out.println("\nWEKTOR x");
         displayVector(x, "x");
         /**
          * inicjalizacja danych macierzy C
@@ -63,7 +64,8 @@ public class instituteStrategy {
                 C[i][j] = generator.nextInt(99);
             }
         }
-        
+
+        System.out.println("\nMACIERZ C");
         displayMatrix(C, n, "C");
 
         /**
@@ -93,12 +95,41 @@ public class instituteStrategy {
          * indeks w tablicy y taki, jak największy element w tablicy z mnożenia
          * C i x
          */
-        for (int j = 0; j < n; j++) {
-            int jj = j + 1;
-            System.out.println("q[" + jj + "]=" + suma[j]);
+        System.out.println("\nWYNIK MNOŻENIA MACIERZY C I WEKTORA x:");
+        displayVector(suma, "s");
+
+        /**
+         * inicjalizacja wektora y
+         */
+        for (int i = 0; i < n; i++) {
+            if (i == (q - 1)) {
+                y[i] = 1;
+            } else {
+                y[i] = 0;
+            }
         }
 
-        System.out.println("Suma dla q[" + q + "] = 1: " + wynik + "\n\n");
+        System.out.println("\nWEKTOR y");
+        displayVector(y, "y");
+
+        System.out.println("\nSuma dla q[" + q + "] = 1: " + wynik + "\n\n");
+
+        /**
+         * the leader finds the strategy x that maximizes his utility, under the
+         * assumption that the follower used optimal response a(x): maxq Ei∈X
+         * Ej∈Q Ri,j*q(x)*xi
+         */
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                /**
+                 * szukamy nowe wartości wektora x, tak, aby wielomian miał jak
+                 * największą wartość. Trzeba pamiętać, że elementy wektora x
+                 * muszą sumować się do 1.
+                 */
+                
+                //TODO
+            }
+        }
 
     }
 
@@ -123,10 +154,10 @@ public class instituteStrategy {
         return result;
     }
 
-    public static void displayVector(double[] x, String name) {
+    public static void displayVector(double[] vector, String name) {
         StringBuilder vectorElements = new StringBuilder();
-        for (int i = 0; i < x.length; i++) {
-            vectorElements.append(name + "="+x[i] + " ");
+        for (int i = 0; i < vector.length; i++) {
+            vectorElements.append(name + "[" + (i + 1) + "]=" + vector[i] + " ");
         }
         System.out.println(vectorElements);
     }
@@ -152,7 +183,7 @@ public class instituteStrategy {
             for (int j = 0; j < n; j++) {
                 int ii = i + 1;
                 int jj = j + 1;
-                System.out.print(name+"[" + ii + "][" + jj + "]=" + matrix[i][j] + "     ");
+                System.out.print(name + "[" + ii + "][" + jj + "]=" + matrix[i][j] + "     ");
             }
             System.out.println("");
         }
