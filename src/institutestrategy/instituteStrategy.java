@@ -12,12 +12,14 @@ import java.util.Random;
  * @author mlyczkowska2
  */
 public class instituteStrategy {
+
     private static final int RANDOM_RANGE = 99;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         /**
          * n - długosc wektora, rozmiar macierzy
          */
@@ -40,7 +42,8 @@ public class instituteStrategy {
          * y - wektor o rozmiarze n, składa się z jednej "1", pozostałe "0"
          */
         double[] y = new double[n];
-        double finalResult = 0.;
+        double[][] coefficients = new double[n][n];
+        double[] linearCoefficients = new double[n];
 
         Random generator = new Random();
 
@@ -58,6 +61,7 @@ public class instituteStrategy {
         }
         System.out.println("\nWEKTOR x");
         displayVector(x, "x");
+        
         /**
          * inicjalizacja danych macierzy C
          */
@@ -75,9 +79,12 @@ public class instituteStrategy {
                 R[i][j] = generator.nextInt(RANDOM_RANGE);
             }
         }
-        
+
         System.out.println("\nMACIERZ C");
         displayMatrix(C, n, "C");
+
+        System.out.println("\nMACIERZ R");
+        displayMatrix(R, n, "R");
 
         /**
          * mnożymy macierz C i wektor x
@@ -135,14 +142,44 @@ public class instituteStrategy {
                 /**
                  * szukamy nowe wartości wektora x, tak, aby wielomian miał jak
                  * największą wartość. Trzeba pamiętać, że elementy wektora x
-                 * muszą sumować się do 1.
+                 * muszą sumować się do 1. http://simplex.republika.pl/
                  */
-                
-                //TODO
-                finalResult += R[i][j]*suma[i];
+
+                coefficients[i][j] = R[i][j] * suma[i];
             }
         }
 
+        System.out.println("\nWSPÓŁCZYNNIKI UKŁADU RÓWNAŃ:");
+        displayMatrix(coefficients, n, "");
+
+        /**
+         * macierz coefficients to nasz układ równań, dodajmy każdy wiersz
+         * stronami, tak, aby uzyskać jedno równanie liniowe
+         */
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+
+                linearCoefficients[i] += coefficients[j][i];
+            }
+        }
+
+        System.out.println("\nWSPÓŁCZYNNIKI UKŁADU LINIOWEGO");
+        displayVector(linearCoefficients, "q");
+        
+        /**
+         * musimy teraz wyznaczyć to równanie tak, aby wielomian
+         * uzyskał maksimum,
+         * mamy:
+         * x[1]*linearCoefficients[1]+...+x[n]*linearCoefficients[n]
+         * 
+         * dodatkowo musi być spełnione: x[1]+...x[n]=1;
+         */
+        
+        
+        //TODO - rozwiązać układ
+        //max of x[1]*linearCoefficients[1]+...+x[n]*linearCoefficients[n]
+        //x[1]+...x[n]=1;
+        
     }
 
     public static double[] initializeVector(int n) {
@@ -191,6 +228,18 @@ public class instituteStrategy {
     }
 
     public static void displayMatrix(int[][] matrix, int n, String name) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int ii = i + 1;
+                int jj = j + 1;
+                System.out.print(name + "[" + ii + "][" + jj + "]=" + matrix[i][j] + "     ");
+            }
+            System.out.println("");
+        }
+
+    }
+
+    public static void displayMatrix(double[][] matrix, int n, String name) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int ii = i + 1;
