@@ -19,6 +19,9 @@ public class instituteStrategy {
      */
     private static final int n = 10;
 
+    private enum Constraint {
+        lessThan, equal, greatherThan
+    }
     /**
      * @param args the command line arguments
      */
@@ -177,20 +180,57 @@ public class instituteStrategy {
         //max of x[1]*linearCoefficients[1]+...+x[n]*linearCoefficients[n]
         //x[1]+...x[n]=1;
         //utwórzmy nowy wektor x, ktorego suma elemento = 1
-        if (haveCorrectSum == false) {
+        
+        /*if (haveCorrectSum == false) {
             System.out.println(
                     "Vector x has not been properly initialized.\n"
                     + "The sum of the elements are different from one");
             x = initializeVector(n);
-        }
+        }*/
+        int numberOfConstraints = 1;
+        int numberOfOriginalVariables = n;
+        double[][] a = new double[numberOfConstraints+1][numberOfOriginalVariables+numberOfConstraints+1];
+        Constraint[] constraintOperator = new Constraint[numberOfConstraints];
+        constraintOperator[0]=Constraint.equal;
+        for (int i = 0; i < numberOfConstraints; i++) {
+                for (int j = 0; j < numberOfOriginalVariables; j++) {
+                    a[i][j] = 1;
+                }
+            }
+
+            for (int i = 0; i < numberOfConstraints; i++) {
+                a[i][numberOfConstraints + numberOfOriginalVariables] = 1;
+            }
+
+            // initialize slack variable
+            for (int i = 0; i < numberOfConstraints; i++) {
+                int slack = 0;
+                switch (constraintOperator[i]) {
+                    case greatherThan:
+                        slack = -1;
+                        break;
+                    case lessThan:
+                        slack = 1;
+                        break;
+                    default:
+                }
+                a[i][numberOfOriginalVariables + i] = slack;
+            }
+
+            // initialize objective function
+            for (int j = 0; j < numberOfOriginalVariables; j++) {
+                a[numberOfConstraints][j] = linearCoefficients[j];
+            }
+        Simplex simplex = new Simplex(a, 1, 10, Simplex.MAXIMIZE);
+        x = simplex.primal();
         System.out.println("\nNOWY WEKTOR x");
         displayVector(x, "x");
 
         //teraz przypiszmy jego wartośći odpowiednio do najwyższym 
         //współczynnika najwiekszy x z utworzonego wczesniej wektora
-        x = sort(x);
+        /*x = sort(x);
         System.out.println("\nPOSORTOWANY WEKTOR x");
-        displayVector(x, "x");
+        displayVector(x, "x");*/
         
         //x = assignMax(x, linearCoefficients);
         
